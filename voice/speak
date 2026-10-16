@@ -1,0 +1,5 @@
+#!/bin/sh
+ROOT=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
+export LD_LIBRARY_PATH="$ROOT/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export ESPEAK_DATA_PATH="$ROOT/share"
+exec "$ROOT/bin/espeak-ng" -s 130 -a 180 "$@"

@@ -1,0 +1,139 @@
+{
+  "id": "p01",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p01.jpg",
+      "alt": "A child on a picnic blanket",
+      "speak_text": "A child in a yellow hat sits on a red picnic blanket.",
+      "rect": {
+        "x": 0.42,
+        "y": 0.08,
+        "width": 0.54,
+        "height": 0.84
+      }
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.03,
+        "y": 0.08,
+        "width": 0.36,
+        "height": 0.28
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "We"
+                },
+                {
+                  "id": "w2",
+                  "text": "sit"
+                },
+                {
+                  "id": "w3",
+                  "text": "on"
+                },
+                {
+                  "id": "w4",
+                  "text": "a"
+                },
+                {
+                  "id": "w5",
+                  "text": "blanket."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.03,
+        "y": 0.46,
+        "width": 0.36,
+        "height": 0.24
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "I"
+                },
+                {
+                  "id": "w2",
+                  "text": "see"
+                },
+                {
+                  "id": "w3",
+                  "text": "a"
+                },
+                {
+                  "id": "w4",
+                  "text": "basket."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Child",
+      "speak_text": "A child in a yellow sun hat.",
+      "polygon": [
+        [
+          0.2,
+          0.15
+        ],
+        [
+          0.7,
+          0.15
+        ],
+        [
+          0.7,
+          0.85
+        ],
+        [
+          0.2,
+          0.85
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Basket",
+      "speak_text": "A picnic basket on the blanket.",
+      "polygon": [
+        [
+          0.62,
+          0.45
+        ],
+        [
+          0.95,
+          0.45
+        ],
+        [
+          0.95,
+          0.9
+        ],
+        [
+          0.62,
+          0.9
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+    "id": "p01",
+    "blocks": [
+        {
+            "type": "text",
+            "content": [
+                {
+                    "lines": [
+                        {
+                            "words": [
+                                { "id": "w1", "text": "Sample", "highlight": false },
+                                { "id": "w2", "text": "text", "highlight": false }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,179 @@
+{
+  "id": "p03",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p03.jpg",
+      "alt": "A child walking home",
+      "speak_text": "The child walks home with the red backpack.",
+      "rect": {
+        "x": 0.04,
+        "y": 0.04,
+        "width": 0.46,
+        "height": 0.52
+      }
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.54,
+        "y": 0.06,
+        "width": 0.42,
+        "height": 0.36
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "School"
+                },
+                {
+                  "id": "w2",
+                  "text": "is"
+                },
+                {
+                  "id": "w3",
+                  "text": "over."
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w4",
+                  "text": "I"
+                },
+                {
+                  "id": "w5",
+                  "text": "walk"
+                },
+                {
+                  "id": "w6",
+                  "text": "home"
+                },
+                {
+                  "id": "w7",
+                  "text": "with"
+                },
+                {
+                  "id": "w8",
+                  "text": "my"
+                },
+                {
+                  "id": "w9",
+                  "text": "backpack."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.06,
+        "y": 0.64,
+        "width": 0.88,
+        "height": 0.28
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "I"
+                },
+                {
+                  "id": "w2",
+                  "text": "can"
+                },
+                {
+                  "id": "w3",
+                  "text": "tell"
+                },
+                {
+                  "id": "w4",
+                  "text": "my"
+                },
+                {
+                  "id": "w5",
+                  "text": "family"
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w6",
+                  "text": "about"
+                },
+                {
+                  "id": "w7",
+                  "text": "the"
+                },
+                {
+                  "id": "w8",
+                  "text": "book."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Child",
+      "speak_text": "The child walking home.",
+      "polygon": [
+        [
+          0.25,
+          0.15
+        ],
+        [
+          0.7,
+          0.15
+        ],
+        [
+          0.7,
+          0.9
+        ],
+        [
+          0.25,
+          0.9
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "House",
+      "speak_text": "A small house.",
+      "polygon": [
+        [
+          0.6,
+          0.1
+        ],
+        [
+          0.95,
+          0.1
+        ],
+        [
+          0.95,
+          0.7
+        ],
+        [
+          0.6,
+          0.7
+        ]
+      ]
+    }
+  ]
+}

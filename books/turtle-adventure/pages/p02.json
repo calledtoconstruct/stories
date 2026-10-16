@@ -1,0 +1,96 @@
+{
+  "id": "p02",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p02.jpg",
+      "alt": "The turtle walking on a path",
+      "speak_text": "The little turtle walks along a dirt path.",
+      "rect": {
+        "x": 0.12,
+        "y": 0.3,
+        "width": 0.76,
+        "height": 0.64
+      }
+    },
+    {
+      "type": "text",
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "The"
+                },
+                {
+                  "id": "w2",
+                  "text": "turtle"
+                },
+                {
+                  "id": "w3",
+                  "text": "walks."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rect": {
+        "x": 0.06,
+        "y": 0.04,
+        "width": 0.88,
+        "height": 0.22
+      }
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Turtle",
+      "speak_text": "The turtle is walking.",
+      "polygon": [
+        [
+          0.15,
+          0.4
+        ],
+        [
+          0.6,
+          0.4
+        ],
+        [
+          0.6,
+          0.9
+        ],
+        [
+          0.15,
+          0.9
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Path",
+      "speak_text": "A brown dirt path.",
+      "polygon": [
+        [
+          0.2,
+          0.7
+        ],
+        [
+          0.9,
+          0.7
+        ],
+        [
+          0.9,
+          0.95
+        ],
+        [
+          0.2,
+          0.95
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "id": "p03",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p03.jpg",
+      "alt": "A child, a red ball, and a dog",
+      "speak_text": "The child holds a red ball beside a brown dog.",
+      "rect": {
+        "x": 0.1,
+        "y": 0.34,
+        "width": 0.8,
+        "height": 0.6
+      }
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.04,
+        "y": 0.04,
+        "width": 0.44,
+        "height": 0.24
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "I"
+                },
+                {
+                  "id": "w2",
+                  "text": "see"
+                },
+                {
+                  "id": "w3",
+                  "text": "a"
+                },
+                {
+                  "id": "w4",
+                  "text": "red"
+                },
+                {
+                  "id": "w5",
+                  "text": "ball."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.52,
+        "y": 0.04,
+        "width": 0.44,
+        "height": 0.24
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "The"
+                },
+                {
+                  "id": "w2",
+                  "text": "dog"
+                },
+                {
+                  "id": "w3",
+                  "text": "wants"
+                },
+                {
+                  "id": "w4",
+                  "text": "to"
+                },
+                {
+                  "id": "w5",
+                  "text": "play."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Ball",
+      "speak_text": "A red ball.",
+      "polygon": [
+        [
+          0.35,
+          0.4
+        ],
+        [
+          0.62,
+          0.4
+        ],
+        [
+          0.62,
+          0.7
+        ],
+        [
+          0.35,
+          0.7
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Dog",
+      "speak_text": "A small brown dog.",
+      "polygon": [
+        [
+          0.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.4
+        ],
+        [
+          0.95,
+          0.92
+        ],
+        [
+          0.6,
+          0.92
+        ]
+      ]
+    }
+  ]
+}

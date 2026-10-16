@@ -1,0 +1,187 @@
+{
+  "id": "p02",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p02.jpg",
+      "alt": "A child reading at a desk",
+      "speak_text": "The child sits at a desk and reads an open book.",
+      "rect": {
+        "x": 0.5,
+        "y": 0.32,
+        "width": 0.46,
+        "height": 0.62
+      }
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.04,
+        "y": 0.04,
+        "width": 0.9,
+        "height": 0.24
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "I"
+                },
+                {
+                  "id": "w2",
+                  "text": "sit"
+                },
+                {
+                  "id": "w3",
+                  "text": "at"
+                },
+                {
+                  "id": "w4",
+                  "text": "my"
+                },
+                {
+                  "id": "w5",
+                  "text": "desk."
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w6",
+                  "text": "I"
+                },
+                {
+                  "id": "w7",
+                  "text": "open"
+                },
+                {
+                  "id": "w8",
+                  "text": "my"
+                },
+                {
+                  "id": "w9",
+                  "text": "book."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.04,
+        "y": 0.32,
+        "width": 0.42,
+        "height": 0.4
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "The"
+                },
+                {
+                  "id": "w2",
+                  "text": "words"
+                },
+                {
+                  "id": "w3",
+                  "text": "are"
+                },
+                {
+                  "id": "w4",
+                  "text": "big."
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w5",
+                  "text": "I"
+                },
+                {
+                  "id": "w6",
+                  "text": "read"
+                },
+                {
+                  "id": "w7",
+                  "text": "them"
+                },
+                {
+                  "id": "w8",
+                  "text": "one"
+                },
+                {
+                  "id": "w9",
+                  "text": "by"
+                },
+                {
+                  "id": "w10",
+                  "text": "one."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Book",
+      "speak_text": "An open picture book.",
+      "polygon": [
+        [
+          0.3,
+          0.45
+        ],
+        [
+          0.7,
+          0.45
+        ],
+        [
+          0.7,
+          0.75
+        ],
+        [
+          0.3,
+          0.75
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Desk",
+      "speak_text": "A wooden desk.",
+      "polygon": [
+        [
+          0.1,
+          0.6
+        ],
+        [
+          0.9,
+          0.6
+        ],
+        [
+          0.9,
+          0.95
+        ],
+        [
+          0.1,
+          0.95
+        ]
+      ]
+    }
+  ]
+}

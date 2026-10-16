@@ -1,0 +1,13 @@
+#!/bin/sh
+here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if [ $# -gt 1 ]; then
+    echo "usage: stories [book-id]" >&2
+    exit 2
+fi
+if [ $# -eq 1 ]; then
+    export STORIES_BOOK=$1
+else
+    unset STORIES_BOOK
+fi
+cd "$here/.." || exit 1
+exec qs -p stories/app/reader.qml

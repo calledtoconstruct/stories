@@ -1,0 +1,100 @@
+{
+  "id": "p03",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p03.jpg",
+      "alt": "The turtle at a pond",
+      "speak_text": "The turtle sits beside a blue pond.",
+      "rect": {
+        "x": 0.48,
+        "y": 0.06,
+        "width": 0.48,
+        "height": 0.88
+      }
+    },
+    {
+      "type": "text",
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "He"
+                },
+                {
+                  "id": "w2",
+                  "text": "finds"
+                },
+                {
+                  "id": "w3",
+                  "text": "a"
+                },
+                {
+                  "id": "w4",
+                  "text": "pond."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rect": {
+        "x": 0.04,
+        "y": 0.58,
+        "width": 0.4,
+        "height": 0.32
+      }
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Turtle",
+      "speak_text": "The turtle looking at the water.",
+      "polygon": [
+        [
+          0.08,
+          0.4
+        ],
+        [
+          0.5,
+          0.4
+        ],
+        [
+          0.5,
+          0.92
+        ],
+        [
+          0.08,
+          0.92
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Pond",
+      "speak_text": "A quiet blue pond.",
+      "polygon": [
+        [
+          0.45,
+          0.45
+        ],
+        [
+          0.95,
+          0.45
+        ],
+        [
+          0.95,
+          0.9
+        ],
+        [
+          0.45,
+          0.9
+        ]
+      ]
+    }
+  ]
+}

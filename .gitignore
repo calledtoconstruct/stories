@@ -1,0 +1,4 @@
+*.qmlc
+*.o
+.qmlls.ini
+voice/usr/

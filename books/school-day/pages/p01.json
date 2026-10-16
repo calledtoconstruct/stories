@@ -1,0 +1,195 @@
+{
+  "id": "p01",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p01.jpg",
+      "alt": "A child walking to school",
+      "speak_text": "A child with a red backpack walks toward the school door.",
+      "rect": {
+        "x": 0.4,
+        "y": 0.05,
+        "width": 0.56,
+        "height": 0.9
+      }
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.03,
+        "y": 0.06,
+        "width": 0.34,
+        "height": 0.38
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "Today"
+                },
+                {
+                  "id": "w2",
+                  "text": "I"
+                },
+                {
+                  "id": "w3",
+                  "text": "walk"
+                },
+                {
+                  "id": "w4",
+                  "text": "to"
+                },
+                {
+                  "id": "w5",
+                  "text": "school."
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w6",
+                  "text": "My"
+                },
+                {
+                  "id": "w7",
+                  "text": "red"
+                },
+                {
+                  "id": "w8",
+                  "text": "backpack"
+                },
+                {
+                  "id": "w9",
+                  "text": "is"
+                },
+                {
+                  "id": "w10",
+                  "text": "on"
+                },
+                {
+                  "id": "w11",
+                  "text": "my"
+                },
+                {
+                  "id": "w12",
+                  "text": "back."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.03,
+        "y": 0.5,
+        "width": 0.34,
+        "height": 0.36
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "The"
+                },
+                {
+                  "id": "w2",
+                  "text": "door"
+                },
+                {
+                  "id": "w3",
+                  "text": "is"
+                },
+                {
+                  "id": "w4",
+                  "text": "open."
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w5",
+                  "text": "I"
+                },
+                {
+                  "id": "w6",
+                  "text": "am"
+                },
+                {
+                  "id": "w7",
+                  "text": "ready"
+                },
+                {
+                  "id": "w8",
+                  "text": "to"
+                },
+                {
+                  "id": "w9",
+                  "text": "learn."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Backpack",
+      "speak_text": "A red backpack.",
+      "polygon": [
+        [
+          0.05,
+          0.35
+        ],
+        [
+          0.4,
+          0.35
+        ],
+        [
+          0.4,
+          0.8
+        ],
+        [
+          0.05,
+          0.8
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Door",
+      "speak_text": "The school door.",
+      "polygon": [
+        [
+          0.55,
+          0.1
+        ],
+        [
+          0.9,
+          0.1
+        ],
+        [
+          0.9,
+          0.75
+        ],
+        [
+          0.55,
+          0.75
+        ]
+      ]
+    }
+  ]
+}

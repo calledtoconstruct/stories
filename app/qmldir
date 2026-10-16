@@ -1,0 +1,5 @@
+BookStore 1.0 BookStore.qml
+Reader 1.0 Reader.qml
+Builder 1.0 Builder.qml
+ShellReader 1.0 reader.qml
+ShellBuilder 1.0 builder.qml

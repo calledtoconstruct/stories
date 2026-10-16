@@ -1,0 +1,8 @@
+{
+  "title": "School Day",
+  "synopsis": "A child walks to school with a red backpack, reads a book, and walks home.",
+  "cover": "assets/images/cover.jpg",
+  "age_band": "school",
+  "format": "storybook/1",
+  "pages": ["p01.json", "p02.json", "p03.json"]
+}

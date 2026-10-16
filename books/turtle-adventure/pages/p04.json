@@ -1,0 +1,100 @@
+{
+  "id": "p04",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p04.jpg",
+      "alt": "The turtle meeting a rabbit",
+      "speak_text": "The turtle meets a small brown rabbit.",
+      "rect": {
+        "x": 0.04,
+        "y": 0.04,
+        "width": 0.5,
+        "height": 0.55
+      }
+    },
+    {
+      "type": "text",
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "He"
+                },
+                {
+                  "id": "w2",
+                  "text": "meets"
+                },
+                {
+                  "id": "w3",
+                  "text": "a"
+                },
+                {
+                  "id": "w4",
+                  "text": "rabbit."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rect": {
+        "x": 0.56,
+        "y": 0.62,
+        "width": 0.4,
+        "height": 0.3
+      }
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Turtle",
+      "speak_text": "The little turtle.",
+      "polygon": [
+        [
+          0.05,
+          0.4
+        ],
+        [
+          0.48,
+          0.4
+        ],
+        [
+          0.48,
+          0.92
+        ],
+        [
+          0.05,
+          0.92
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Rabbit",
+      "speak_text": "A small brown rabbit.",
+      "polygon": [
+        [
+          0.5,
+          0.35
+        ],
+        [
+          0.95,
+          0.35
+        ],
+        [
+          0.95,
+          0.9
+        ],
+        [
+          0.5,
+          0.9
+        ]
+      ]
+    }
+  ]
+}

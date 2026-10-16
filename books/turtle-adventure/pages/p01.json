@@ -1,0 +1,96 @@
+{
+  "id": "p01",
+  "blocks": [
+    {
+      "type": "image",
+      "src": "assets/images/p01.jpg",
+      "alt": "A little turtle in a garden",
+      "speak_text": "A little green turtle with a brown shell sits in a garden.",
+      "rect": {
+        "x": 0.02,
+        "y": 0.06,
+        "width": 0.58,
+        "height": 0.88
+      }
+    },
+    {
+      "type": "text",
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "A"
+                },
+                {
+                  "id": "w2",
+                  "text": "little"
+                },
+                {
+                  "id": "w3",
+                  "text": "turtle."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rect": {
+        "x": 0.64,
+        "y": 0.1,
+        "width": 0.32,
+        "height": 0.36
+      }
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "h1",
+      "label": "Turtle",
+      "speak_text": "A little green turtle with a brown shell.",
+      "polygon": [
+        [
+          0.08,
+          0.35
+        ],
+        [
+          0.55,
+          0.35
+        ],
+        [
+          0.55,
+          0.9
+        ],
+        [
+          0.08,
+          0.9
+        ]
+      ]
+    },
+    {
+      "id": "h2",
+      "label": "Flower",
+      "speak_text": "A yellow flower in the garden.",
+      "polygon": [
+        [
+          0.58,
+          0.2
+        ],
+        [
+          0.92,
+          0.2
+        ],
+        [
+          0.92,
+          0.7
+        ],
+        [
+          0.58,
+          0.7
+        ]
+      ]
+    }
+  ]
+}
