@@ -18,9 +18,18 @@ FloatingWindow {
 
     property string pendingSpeech: ""
     property bool replacingSpeech: false
+    property int launchedEpoch: 0
 
     Process {
         id: speaker
+        stdout: SplitParser {
+            splitMarker: "\n"
+            onRead: function(data) {
+                var line = String(data).replace(/\r$/, "")
+                if (line.indexOf("WORD ") === 0)
+                    reader.hearWord(line.substring(5).trim())
+            }
+        }
         onExited: {
             if (root.replacingSpeech) {
                 root.replacingSpeech = false
@@ -31,6 +40,42 @@ FloatingWindow {
         }
     }
 
+    Process {
+        id: warmer
+        stdout: SplitParser {
+            splitMarker: "\n"
+            onRead: function(data) {
+                var line = String(data).replace(/\r$/, "")
+                if (line.indexOf("PAGE") !== 0)
+                    return
+                var epoch = line.length > 4 ? parseInt(line.substring(5), 10) : 0
+                reader.noteVoicePage(epoch)
+            }
+        }
+        onExited: {
+            exitSettle.epoch = root.launchedEpoch
+            exitSettle.restart()
+        }
+    }
+
+    Timer {
+        id: exitSettle
+        interval: 0
+        property int epoch: 0
+        onTriggered: {
+            if (epoch !== reader.prepareEpoch)
+                return
+            if (warmer.running)
+                return
+            reader.voicePrepareEnded()
+        }
+    }
+
+    function stopWarm() {
+        if (warmer.running)
+            warmer.signal(15)
+    }
+
     function sayNow(text) {
         speaker.exec(["/home/joseph/code/stories/voice/speak", text])
     }
@@ -39,6 +84,16 @@ FloatingWindow {
         id: reader
         anchors.fill: parent
         voiceReady: true
+        onWarmRequested: function(payload) {
+            root.stopWarm()
+            if (!payload) {
+                root.launchedEpoch = 0
+                reader.clearVoice()
+                return
+            }
+            root.launchedEpoch = reader.prepareEpoch
+            warmer.exec(["/home/joseph/code/stories/voice/speak", payload])
+        }
         onOpenRequested: function(bookId) {
             reader.showBook(store.loadBook(root.booksRoot + "/" + bookId))
         }

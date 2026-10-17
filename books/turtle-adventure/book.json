@@ -3,6 +3,12 @@
   "synopsis": "A little turtle walks out of the garden, finds a pond, and meets a rabbit.",
   "cover": "assets/images/cover.jpg",
   "age_band": "early",
+  "voice": "af_bella",
   "format": "storybook/1",
-  "pages": ["p01.json", "p02.json", "p03.json", "p04.json"]
+  "pages": [
+    "p01.json",
+    "p02.json",
+    "p03.json",
+    "p04.json"
+  ]
 }

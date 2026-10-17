@@ -103,3 +103,23 @@ function moveRect(rect, x, y) {
         height: height
     }
 }
+
+function resizeRect(rect, x, y, width, height) {
+    var minW = 0.05
+    var minH = 0.07
+    var nx = clamp01(x)
+    var ny = clamp01(y)
+    var w = width > minW ? width : minW
+    var h = height > minH ? height : minH
+    if (nx + w > 1) {
+        if (nx > 1 - minW)
+            nx = 1 - minW
+        w = 1 - nx
+    }
+    if (ny + h > 1) {
+        if (ny > 1 - minH)
+            ny = 1 - minH
+        h = 1 - ny
+    }
+    return { x: nx, y: ny, width: w, height: h }
+}

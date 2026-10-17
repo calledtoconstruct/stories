@@ -29,5 +29,15 @@ TestCase {
         compare(moved.x, 0.1)
         compare(moved.y, 0.6)
         compare(moved.width, 0.25)
+        var sized = Layout.resizeRect(authored[0].rect, 0.1, 0.2, 0.5, 0.6)
+        compare(sized.x, 0.1)
+        compare(sized.y, 0.2)
+        compare(sized.width, 0.5)
+        compare(sized.height, 0.6)
+        var limited = Layout.resizeRect(authored[0].rect, 0.9, 0.95, 0.8, 0.8)
+        verify(limited.x + limited.width <= 1)
+        verify(limited.y + limited.height <= 1)
+        verify(limited.width >= 0.05)
+        verify(limited.height >= 0.07)
     }
 }

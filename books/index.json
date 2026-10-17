@@ -1,3 +1,7 @@
 {
-  "books": ["turtle-adventure", "family-picnic", "school-day"]
+  "books": [
+    "turtle-adventure",
+    "family-picnic",
+    "school-day"
+  ]
 }

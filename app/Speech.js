@@ -136,3 +136,159 @@ function reading(page) {
     }
     return { paragraphs: paragraphs, pictures: pictures, hotspots: hotspots, words: words }
 }
+
+function phrase(tokens) {
+    return joinText(tokens || [])
+}
+
+function phraseWords(text, host) {
+    var parts = String(text || "").split(/\s+/)
+    var words = []
+    var i
+    var n = 0
+    for (i = 0; i < parts.length; i++) {
+        if (!parts[i])
+            continue
+        n = n + 1
+        words.push({ id: (host || "spoken") + ":" + n, text: parts[i] })
+    }
+    return words
+}
+
+function voiceName(book) {
+    if (book && book.voice)
+        return book.voice
+    return "af_heart"
+}
+
+function wordById(tokens, id) {
+    var i
+    var list = tokens || []
+    for (i = 0; i < list.length; i++) {
+        if (list[i].id === id)
+            return list[i]
+    }
+    return null
+}
+
+function speechPayload(voice, tokens) {
+    var words = []
+    var list = tokens || []
+    var i
+    for (i = 0; i < list.length; i++) {
+        words.push({
+            id: list[i].id || "",
+            text: list[i].text || ""
+        })
+    }
+    return JSON.stringify({
+        voice: voice || "af_heart",
+        words: words
+    })
+}
+
+function addPhrase(phrases, seen, words) {
+    if (!words || !words.length)
+        return
+    var key = phrase(words)
+    if (!key || seen[key])
+        return
+    seen[key] = true
+    var copy = []
+    var i
+    for (i = 0; i < words.length; i++)
+        copy.push({ id: words[i].id || "", text: words[i].text || "" })
+    phrases.push(copy)
+}
+
+function addPagePhrases(phrases, seen, model) {
+    var page = model || {}
+    addPhrase(phrases, seen, page.words)
+    var paragraphs = page.paragraphs || []
+    var p, l
+    for (p = 0; p < paragraphs.length; p++) {
+        addPhrase(phrases, seen, paragraphs[p].words)
+        var lines = paragraphs[p].lines || []
+        for (l = 0; l < lines.length; l++)
+            addPhrase(phrases, seen, lines[l].words)
+    }
+    var pictures = page.pictures || []
+    for (p = 0; p < pictures.length; p++)
+        addPhrase(phrases, seen, phraseWords(pictures[p].speak || "", "picture"))
+    var hotspots = page.hotspots || []
+    for (p = 0; p < hotspots.length; p++)
+        addPhrase(phrases, seen, phraseWords(hotspots[p].speak || "", hotspots[p].id || "spot"))
+}
+
+function addPageWords(phrases, seen, model) {
+    var paragraphs = (model || {}).paragraphs || []
+    var p, l, w
+    for (p = 0; p < paragraphs.length; p++) {
+        var lines = paragraphs[p].lines || []
+        for (l = 0; l < lines.length; l++) {
+            var lineWords = lines[l].words || []
+            for (w = 0; w < lineWords.length; w++)
+                addPhrase(phrases, seen, [lineWords[w]])
+        }
+    }
+}
+
+function warmPayload(voice, reading) {
+    var phrases = []
+    var seen = {}
+    var model = reading || {}
+    var paragraphs = model.paragraphs || []
+    var p, l
+    for (p = 0; p < paragraphs.length; p++) {
+        var lines = paragraphs[p].lines || []
+        for (l = 0; l < lines.length; l++)
+            addPhrase(phrases, seen, lines[l].words)
+    }
+    var pictures = model.pictures || []
+    for (p = 0; p < pictures.length; p++)
+        addPhrase(phrases, seen, phraseWords(pictures[p].speak || "", "picture"))
+    var hotspots = model.hotspots || []
+    for (p = 0; p < hotspots.length; p++)
+        addPhrase(phrases, seen, phraseWords(hotspots[p].speak || "", hotspots[p].id || "spot"))
+    addPageWords(phrases, seen, model)
+    return JSON.stringify({
+        warm: true,
+        voice: voice || "af_heart",
+        phrases: phrases
+    })
+}
+
+function warmBook(voice, pages, index) {
+    var list = pages || []
+    var start = index || 0
+    if (start < 0 || start >= list.length)
+        start = 0
+    var order = []
+    var i
+    if (list.length)
+        order.push(start)
+    for (i = start + 1; i < list.length; i++)
+        order.push(i)
+    for (i = start - 1; i >= 0; i--)
+        order.push(i)
+    var models = []
+    for (i = 0; i < order.length; i++)
+        models.push(reading(list[order[i]]))
+    var phrases = []
+    var seen = {}
+    var pagePhrases = 0
+    if (models.length) {
+        addPagePhrases(phrases, seen, models[0])
+        pagePhrases = phrases.length
+    }
+    for (i = 1; i < models.length; i++)
+        addPagePhrases(phrases, seen, models[i])
+    for (i = 0; i < models.length; i++)
+        addPageWords(phrases, seen, models[i])
+    return JSON.stringify({
+        warm: true,
+        voice: voice || "af_heart",
+        page_phrases: pagePhrases,
+        phrases: phrases
+    })
+}

@@ -22,19 +22,137 @@
               "words": [
                 {
                   "id": "w1",
-                  "text": "He"
+                  "text": "At"
                 },
                 {
                   "id": "w2",
-                  "text": "finds"
+                  "text": "the"
                 },
                 {
                   "id": "w3",
-                  "text": "a"
+                  "text": "pond,"
                 },
                 {
                   "id": "w4",
-                  "text": "pond."
+                  "text": "I"
+                },
+                {
+                  "id": "w5",
+                  "text": "can",
+                  "highlight": false
+                },
+                {
+                  "id": "w6",
+                  "text": "see",
+                  "highlight": false
+                },
+                {
+                  "id": "w7",
+                  "text": "fish",
+                  "highlight": false
+                },
+                {
+                  "id": "w8",
+                  "text": "and",
+                  "highlight": false
+                },
+                {
+                  "id": "w9",
+                  "text": "plants.",
+                  "highlight": false
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w10",
+                  "text": "There",
+                  "highlight": false
+                },
+                {
+                  "id": "w11",
+                  "text": "are",
+                  "highlight": false
+                },
+                {
+                  "id": "w12",
+                  "text": "frogs",
+                  "highlight": false
+                },
+                {
+                  "id": "w13",
+                  "text": "and",
+                  "highlight": false
+                },
+                {
+                  "id": "w14",
+                  "text": "toads.",
+                  "highlight": false
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w15",
+                  "text": "So",
+                  "highlight": false
+                },
+                {
+                  "id": "w16",
+                  "text": "many",
+                  "highlight": false
+                },
+                {
+                  "id": "w17",
+                  "text": "wonderful",
+                  "highlight": false
+                },
+                {
+                  "id": "w18",
+                  "text": "animals",
+                  "highlight": false
+                },
+                {
+                  "id": "w19",
+                  "text": "come",
+                  "highlight": false
+                },
+                {
+                  "id": "w20",
+                  "text": "to",
+                  "highlight": false
+                },
+                {
+                  "id": "w21",
+                  "text": "the",
+                  "highlight": false
+                },
+                {
+                  "id": "w22",
+                  "text": "pond",
+                  "highlight": false
+                },
+                {
+                  "id": "w23",
+                  "text": "to",
+                  "highlight": false
+                },
+                {
+                  "id": "w24",
+                  "text": "drink",
+                  "highlight": false
+                },
+                {
+                  "id": "w25",
+                  "text": "and",
+                  "highlight": false
+                },
+                {
+                  "id": "w26",
+                  "text": "play.",
+                  "highlight": false
                 }
               ]
             }
@@ -42,10 +160,10 @@
         }
       ],
       "rect": {
-        "x": 0.04,
-        "y": 0.58,
-        "width": 0.4,
-        "height": 0.32
+        "x": 0.04277646377242961,
+        "y": 0.05796202642656681,
+        "width": 0.424525429989795,
+        "height": 0.526548906688494
       }
     }
   ],

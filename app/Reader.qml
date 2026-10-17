@@ -1,6 +1,8 @@
 import QtQuick
+import "."
 import "Theme.js" as Theme
 import "Speech.js" as Speech
+import "Draft.js" as Draft
 import "Dwell.js" as Dwell
 import "Place.js" as Place
 import "Shelf.js" as Shelf
@@ -33,8 +35,18 @@ Item {
     property var lastTokens: []
     property string spokenId: ""
     property string lastSpoken: ""
+    property string voiceName: "af_heart"
+    property string utteranceText: ""
+    property string speechHost: ""
+    property string lastHost: ""
     property bool awaitingSpeech: false
     property bool voiceReady: false
+    property string voiceStatus: ""
+    property double prepareMark: 0
+    property int prepareEpoch: 0
+    property int prepareWaitMs: 300
+    property int readyHoldMs: 1600
+    readonly property bool voiceShown: voiceStatus !== "" && !showingLibrary
     property string armedButton: ""
     property double navIgnore: 0
     property color accentColor: "#4caf50"
@@ -48,12 +60,8 @@ Item {
 
     signal openRequested(string bookId)
     signal speakRequested(string text)
+    signal warmRequested(string payload)
     readonly property real fitScale: sheet.fit
-
-    Timer {
-        id: advanceTimer
-        onTriggered: root.speechFinished()
-    }
 
     Item {
         id: viewport
@@ -143,14 +151,31 @@ Item {
                                 font.pixelSize: Math.max(28, viewport.frameHeight * 0.055)
                                 wrapMode: Text.WordWrap
                             }
-                            Text {
-                                id: bookSynopsis
+                            Flow {
+                                id: synopsisFlow
+                                property string synopsis: modelData.synopsis || ""
                                 visible: root.selectedBookId === modelData.id
                                 width: bookWords.width
-                                text: modelData.synopsis
-                                color: root.textColor
-                                font.pixelSize: Math.max(22, viewport.frameHeight * 0.04)
-                                wrapMode: Text.WordWrap
+                                spacing: 6
+                                Repeater {
+                                    model: Speech.phraseWords(synopsisFlow.synopsis, "synopsis")
+                                    Item {
+                                        width: synopsisText.implicitWidth + 4
+                                        height: Math.max(22, synopsisText.implicitHeight)
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            radius: 4
+                                            color: root.spokenId === modelData.id ? root.accentColor : "transparent"
+                                        }
+                                        Text {
+                                            id: synopsisText
+                                            anchors.centerIn: parent
+                                            text: modelData.text
+                                            color: root.spokenId === modelData.id ? root.paperColor : root.textColor
+                                            font.pixelSize: Math.max(22, viewport.frameHeight * 0.04)
+                                        }
+                                    }
+                                }
                             }
                         }
 
@@ -185,35 +210,18 @@ Item {
         }
 
         Item {
-            id: sheet
+            id: reading
             visible: !root.showingLibrary
-            width: root.implicitWidth
-            height: root.implicitHeight
-            transformOrigin: Item.TopLeft
-            readonly property real fit: Math.min(viewport.frameWidth / width, viewport.frameHeight / height)
-            scale: fit
-            x: Math.round((viewport.frameWidth - width * fit) / 2)
-            y: Math.round((viewport.frameHeight - height * fit) / 2)
-
-    Row {
-        anchors.fill: parent
-
-        NavZone {
-            side: "prev"
-            visible: root.canGoPrev
-            width: root.canGoPrev ? sheet.width * 0.12 : 0
-            height: sheet.height
-        }
-
-        Item {
-            id: stage
-            width: sheet.width - (root.canGoPrev ? sheet.width * 0.12 : 0) - (root.canGoNext ? sheet.width * 0.12 : 0)
-            height: sheet.height
+            anchors.fill: parent
+            readonly property real navW: 104
+            readonly property real leftNav: root.canGoPrev ? navW : 0
+            readonly property real rightNav: root.canGoNext ? navW : 0
 
             Column {
-                id: pageColumn
-                anchors.fill: parent
-                anchors.margins: 12
+                id: topBar
+                x: 12
+                y: 12
+                width: Math.max(0, viewport.frameWidth - 24)
                 spacing: 8
 
                 Text {
@@ -225,105 +233,54 @@ Item {
                     wrapMode: Text.WordWrap
                 }
 
+                Row {
+                    id: voiceLine
+                    objectName: "voiceStatus"
+                    width: parent.width
+                    spacing: 8
+                    visible: root.voiceShown
+                    height: root.voiceShown ? implicitHeight : 0
+
+                    Rectangle {
+                        id: voiceStatusDot
+                        objectName: "voiceStatusDot"
+                        visible: root.voiceStatus === "preparing"
+                        width: Math.max(10, root.fontPxValue * 0.28)
+                        height: width
+                        radius: width / 2
+                        color: root.accentColor
+                        anchors.verticalCenter: parent.verticalCenter
+                        SequentialAnimation on opacity {
+                            running: root.voiceStatus === "preparing"
+                            loops: Animation.Infinite
+                            NumberAnimation { from: 1; to: 0.35; duration: 700 }
+                            NumberAnimation { from: 0.35; to: 1; duration: 700 }
+                        }
+                    }
+
+                    Text {
+                        objectName: "voiceStatusText"
+                        width: Math.max(0, voiceLine.width - (voiceStatusDot.visible ? voiceStatusDot.width + voiceLine.spacing : 0))
+                        text: root.voiceStatus === "ready" ? "Ready" : "Getting the voice ready"
+                        color: root.voiceStatus === "ready" ? root.accentColor : root.textColor
+                        font.pixelSize: Math.max(18, root.fontPxValue - 10)
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
                 Text {
                     objectName: "pageWords"
                     visible: false
                     text: root.pageWords
                 }
+            }
 
-                Text {
-                    objectName: "currentWord"
-                    width: parent.width
-                    text: root.currentWord
-                    color: root.accentColor
-                    font.pixelSize: root.fontPxValue
-                    wrapMode: Text.WordWrap
-                }
-
-                Item {
-                    id: canvas
-                    width: pageColumn.width
-                    height: Math.max(240, pageColumn.height - 210)
-
-                    Repeater {
-                        model: root.pictures
-                        Item {
-                            x: modelData.rect.x * canvas.width
-                            y: modelData.rect.y * canvas.height
-                            width: modelData.rect.width * canvas.width
-                            height: modelData.rect.height * canvas.height
-                            Image {
-                                anchors.fill: parent
-                                fillMode: Image.PreserveAspectFit
-                                source: root.imageSource(modelData.src)
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: root.speakText(modelData.speak, "picture")
-                                }
-                            }
-                        }
-                    }
-
-                    Repeater {
-                        model: root.paragraphs
-                        Item {
-                            x: modelData.rect.x * canvas.width
-                            y: modelData.rect.y * canvas.height
-                            width: modelData.rect.width * canvas.width
-                            height: modelData.rect.height * canvas.height
-                            clip: true
-
-                            Column {
-                                anchors.fill: parent
-                                spacing: 4
-                                Repeater {
-                                    model: modelData.lines
-                                    Row {
-                                        spacing: 6
-                                        width: parent.width
-                                        ReadIcon {
-                                            id: lineIcon
-                                            kind: "line"
-                                            onClicked: root.readLine(modelData)
-                                        }
-                                        Flow {
-                                            width: Math.max(0, parent.width - lineIcon.width - 6)
-                                            spacing: 6
-                                            Repeater {
-                                                model: modelData.words
-                                                Item {
-                                                    width: wordText.implicitWidth + 10
-                                                    height: Math.max(root.fontPxValue + 6, wordText.implicitHeight + 6)
-                                                    Rectangle {
-                                                        anchors.fill: parent
-                                                        radius: 4
-                                                        color: root.spokenId === modelData.id ? root.accentColor : "transparent"
-                                                        border.width: 0
-                                                    }
-                                                    Text {
-                                                        id: wordText
-                                                        anchors.centerIn: parent
-                                                        text: modelData.text
-                                                        color: root.spokenId === modelData.id ? root.paperColor : root.textColor
-                                                        font.pixelSize: root.fontPxValue
-                                                    }
-                                                    MouseArea {
-                                                        anchors.fill: parent
-                                                        onClicked: root.speakText(modelData.text, modelData.id)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                ReadIcon {
-                                    kind: "paragraph"
-                                    onClicked: root.readParagraph(modelData)
-                                }
-                            }
-                        }
-                    }
-                }
+            Column {
+                id: bottomBar
+                x: 12
+                width: Math.max(0, viewport.frameWidth - 24)
+                y: Math.max(0, viewport.frameHeight - height - 12)
+                spacing: 8
 
                 Flow {
                     width: parent.width
@@ -335,14 +292,14 @@ Item {
                             width: Math.max(120, labelText.implicitWidth + 28)
                             height: 52
                             radius: 12
-                            color: root.spokenId === modelData.id ? root.accentColor : root.paperColor
+                            color: root.spokenId === modelData.id || root.speechHost === modelData.id ? root.accentColor : root.paperColor
                             border.width: 3
                             border.color: root.accentColor
                             Text {
                                 id: labelText
                                 anchors.centerIn: parent
                                 text: modelData.label
-                                color: root.spokenId === modelData.id ? root.paperColor : root.textColor
+                                color: root.spokenId === modelData.id || root.speechHost === modelData.id ? root.paperColor : root.textColor
                                 font.pixelSize: 20
                             }
                             MouseArea {
@@ -366,17 +323,223 @@ Item {
                         onClicked: root.repeatLast()
                     }
                 }
+            }
 
+            NavZone {
+                side: "prev"
+                visible: root.canGoPrev
+                x: 0
+                y: pageFrame.y
+                width: reading.leftNav
+                height: pageFrame.height
+            }
+
+            NavZone {
+                side: "next"
+                visible: root.canGoNext
+                x: Math.max(0, viewport.frameWidth - reading.rightNav)
+                y: pageFrame.y
+                width: reading.rightNav
+                height: pageFrame.height
+            }
+
+            Item {
+                id: pageFrame
+                x: reading.leftNav
+                y: topBar.y + topBar.height + 8
+                width: Math.max(1, viewport.frameWidth - reading.leftNav - reading.rightNav)
+                height: Math.max(1, bottomBar.y - y - 8)
+
+                Item {
+                    id: sheet
+                    objectName: "storySheet"
+                    width: 1100
+                    height: 700
+                    clip: true
+                    transformOrigin: Item.TopLeft
+                    readonly property real fit: Math.min(pageFrame.width / width, pageFrame.height / height)
+                    scale: fit
+                    x: Math.round((pageFrame.width - width * scale) / 2)
+                    y: Math.round((pageFrame.height - height * scale) / 2)
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: root.backgroundColor
+                    }
+
+                    Item {
+                        id: canvas
+                        objectName: "storyCanvas"
+                        anchors.fill: parent
+
+                Repeater {
+                    model: root.pictures
+                    Item {
+                        x: modelData.rect.x * canvas.width
+                        y: modelData.rect.y * canvas.height
+                        width: modelData.rect.width * canvas.width
+                        height: modelData.rect.height * canvas.height
+                        Image {
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
+                            source: root.imageSource(modelData.src)
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: root.speakText(modelData.speak, "picture")
+                            }
+                        }
+                    }
+                }
+
+                Repeater {
+                    model: root.paragraphs
+                    Item {
+                        id: paragraphItem
+                        objectName: "paragraphBox"
+                        x: modelData.rect.x * canvas.width
+                        y: modelData.rect.y * canvas.height
+                        width: modelData.rect.width * canvas.width
+                        height: modelData.rect.height * canvas.height
+                        property var lineTops: []
+
+                        function rememberLine(i, yPos) {
+                            var tops = lineTops
+                            if (tops[i] === yPos)
+                                return
+                            var next = tops.slice()
+                            next[i] = yPos
+                            lineTops = next
+                        }
+
+                        Item {
+                            anchors.fill: parent
+                            clip: true
+
+                            Column {
+                                id: textCol
+                                objectName: "paragraphText"
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.margins: 8
+                                spacing: 4
+
+                                Repeater {
+                                    model: modelData.lines
+                                    Item {
+                                        id: lineSlot
+                                        property var lineWords: modelData.words || []
+                                        width: textCol.width
+                                        height: Math.max(44, wordFlow.implicitHeight)
+                                        onYChanged: paragraphItem.rememberLine(index, y)
+                                        onHeightChanged: paragraphItem.rememberLine(index, y)
+                                        Component.onCompleted: paragraphItem.rememberLine(index, y)
+
+                                        Flow {
+                                            id: wordFlow
+                                            width: parent.width
+                                            spacing: 6
+                                            Repeater {
+                                                model: lineSlot.lineWords
+                                                Item {
+                                                    width: wordText.implicitWidth + 4
+                                                    height: Math.max(root.fontPxValue, wordText.implicitHeight)
+                                                    Rectangle {
+                                                        anchors.fill: parent
+                                                        radius: 4
+                                                        color: root.spokenId === modelData.id ? root.accentColor : "transparent"
+                                                        border.width: 0
+                                                    }
+                                                    Text {
+                                                        id: wordText
+                                                        anchors.centerIn: parent
+                                                        text: modelData.text
+                                                        color: root.spokenId === modelData.id ? root.paperColor : root.textColor
+                                                        font.pixelSize: root.fontPxValue
+                                                    }
+                                                    MouseArea {
+                                                        anchors.fill: parent
+                                                        onClicked: root.speakText(modelData.text, modelData.id)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Repeater {
+                            model: modelData.lines
+                            ReadMark {
+                                objectName: "readLine"
+                                kind: "line"
+                                markColor: root.accentColor
+                                x: -width - 8
+                                y: textCol.y + (paragraphItem.lineTops[index] || 0)
+                                onClicked: root.readLine(modelData)
+                            }
+                        }
+
+                        ReadMark {
+                            objectName: "readParagraph"
+                            kind: "paragraph"
+                            markColor: root.accentColor
+                            property bool shown: Draft.sentenceCount(modelData.words) > 1
+                            visible: shown
+                            x: -width - 8
+                            y: parent.height + 8
+                            onClicked: root.readParagraph(modelData)
+                        }
+                    }
+                }
+            }
+
+                }
             }
         }
 
-        NavZone {
-            side: "next"
-            visible: root.canGoNext
-            width: root.canGoNext ? sheet.width * 0.12 : 0
-            height: sheet.height
-        }
-    }
+        Rectangle {
+            id: speechBubble
+            objectName: "speechBubble"
+            property bool shown: root.awaitingSpeech && !root.showingLibrary && root.speechHost !== ""
+            visible: shown
+            z: 6
+            radius: 16
+            color: root.paperColor
+            border.color: root.accentColor
+            border.width: 3
+            width: Math.max(160, pageFrame.width * 0.72)
+            height: bubbleFlow.implicitHeight + 20
+            x: pageFrame.x + Math.max(0, (pageFrame.width - width) / 2)
+            y: pageFrame.y + pageFrame.height - height - 12
+
+            Flow {
+                id: bubbleFlow
+                x: 14
+                y: 10
+                width: parent.width - 28
+                spacing: 6
+                Repeater {
+                    model: speechBubble.shown ? root.lastTokens : []
+                    Item {
+                        width: bubbleWord.implicitWidth + 4
+                        height: Math.max(28, bubbleWord.implicitHeight)
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: 4
+                            color: root.spokenId === modelData.id ? root.accentColor : "transparent"
+                        }
+                        Text {
+                            id: bubbleWord
+                            anchors.centerIn: parent
+                            text: modelData.text
+                            color: root.spokenId === modelData.id ? root.paperColor : root.textColor
+                            font.pixelSize: 28
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -408,6 +571,66 @@ Item {
         pageWords = Speech.pageWords(page).join(" ")
         currentWord = pageTokens.length ? pageTokens[0].text : ""
         placeText = Place.encode({ page: index })
+        if (voiceReady && loadedBook) {
+            var epoch = beginPrepare()
+            var body = JSON.parse(Speech.warmBook(voiceName, loadedBook.pages, index))
+            body.epoch = epoch
+            warmRequested(JSON.stringify(body))
+        } else {
+            clearVoice()
+        }
+    }
+
+    function beginPrepare() {
+        prepareEpoch += 1
+        prepareMark = Date.now()
+        voiceStatus = ""
+        readyHold.stop()
+        prepareDelay.interval = prepareWaitMs
+        prepareDelay.restart()
+        return prepareEpoch
+    }
+
+    function clearVoice() {
+        prepareEpoch += 1
+        prepareMark = 0
+        voiceStatus = ""
+        prepareDelay.stop()
+        readyHold.stop()
+    }
+
+    function showPreparing() {
+        if (!prepareMark)
+            return
+        voiceStatus = "preparing"
+    }
+
+    function noteVoicePage(epoch) {
+        if (epoch && epoch !== prepareEpoch)
+            return
+        if (!prepareMark && voiceStatus !== "preparing")
+            return
+        var fast = prepareMark && (Date.now() - prepareMark < prepareWaitMs)
+        prepareDelay.stop()
+        prepareMark = 0
+        if (fast && voiceStatus !== "preparing") {
+            voiceStatus = ""
+            return
+        }
+        voiceStatus = "ready"
+        readyHold.interval = readyHoldMs
+        readyHold.restart()
+    }
+
+    function voicePrepareEnded() {
+        prepareDelay.stop()
+        if (voiceStatus === "preparing")
+            voiceStatus = ""
+    }
+
+    function dismissReady() {
+        if (voiceStatus === "ready")
+            voiceStatus = ""
     }
 
     function showLibrary(entries) {
@@ -425,6 +648,21 @@ Item {
         pictures = []
         hotspots = []
         pageTokens = []
+        clearVoice()
+        if (voiceReady)
+            warmRequested("")
+    }
+
+    Timer {
+        id: prepareDelay
+        interval: 300
+        onTriggered: root.showPreparing()
+    }
+
+    Timer {
+        id: readyHold
+        interval: 1600
+        onTriggered: root.dismissReady()
     }
 
     function scrollLibrary(direction) {
@@ -437,6 +675,7 @@ Item {
             return
         if (selectedBookId !== book.id) {
             selectedBookId = book.id
+            voiceName = book.voice || "af_heart"
             speakText(book.synopsis || book.title || book.id, "synopsis")
             return
         }
@@ -451,6 +690,7 @@ Item {
         showingLibrary = false
         loadedBook = loaded
         titleText = loaded.book.title
+        voiceName = loaded.book.voice || "af_heart"
         fontPxValue = Theme.fontPx(loaded.book.age_band, loaded.theme.font_scale)
         backgroundColor = loaded.theme.background || "#f5f5f5"
         paperColor = loaded.theme.paper || "#ffffff"
@@ -463,63 +703,99 @@ Item {
         showPage(index)
     }
 
-    function beginSpeak(tokens) {
-        lastTokens = tokens ? tokens.slice() : []
-        speakQueue = lastTokens.slice()
-        pump()
+    function wordIsOnPage(id) {
+        if (!id)
+            return false
+        var list = paragraphs || []
+        var p
+        var l
+        var w
+        for (p = 0; p < list.length; p++) {
+            var lines = list[p].lines || []
+            for (l = 0; l < lines.length; l++) {
+                var words = lines[l].words || []
+                for (w = 0; w < words.length; w++) {
+                    if (words[w].id === id)
+                        return true
+                }
+            }
+        }
+        return false
     }
 
-    function pump() {
-        advanceTimer.stop()
-        if (!speakQueue.length) {
+    function beginSpeak(tokens) {
+        lastTokens = tokens ? tokens.slice() : []
+        speakQueue = []
+        spokenId = ""
+        lastHost = speechHost
+        if (!lastTokens.length) {
             awaitingSpeech = false
-            spokenId = ""
+            utteranceText = ""
+            speechHost = ""
+            speakRequested("")
             return
         }
-        var item = speakQueue[0]
-        speakQueue = speakQueue.slice(1)
-        spokenId = item.id
-        currentWord = item.text
-        lastSpoken = item.text
+        utteranceText = Speech.phrase(lastTokens)
+        currentWord = lastTokens[0].text
+        lastSpoken = utteranceText
         awaitingSpeech = true
-        speakRequested(item.text)
-        advanceTimer.interval = voiceReady ? 8000 : 30
-        advanceTimer.restart()
+        speakRequested(Speech.speechPayload(voiceName, lastTokens))
+    }
+
+    function hearWord(id) {
+        if (!awaitingSpeech || !id)
+            return
+        var token = Speech.wordById(lastTokens, id)
+        spokenId = id
+        if (token && token.text)
+            currentWord = token.text
     }
 
     function speechFinished() {
         if (!awaitingSpeech)
             return
         awaitingSpeech = false
-        pump()
+        spokenId = ""
+        speechHost = ""
     }
 
     function stopSpeaking() {
         speakQueue = []
         awaitingSpeech = false
-        advanceTimer.stop()
         spokenId = ""
+        speechHost = ""
     }
 
     function speakText(text, id) {
-        beginSpeak([{ id: id, text: text }])
+        if (wordIsOnPage(id)) {
+            speechHost = ""
+            beginSpeak([{ id: id, text: text }])
+            return
+        }
+        speechHost = id || "spoken"
+        beginSpeak(Speech.phraseWords(text, speechHost))
     }
 
     function readLine(line) {
+        speechHost = ""
         beginSpeak(line.words || [])
     }
 
     function readParagraph(paragraph) {
+        speechHost = ""
         beginSpeak(paragraph.words || [])
     }
 
     function readPage() {
+        speechHost = ""
         beginSpeak(pageTokens)
     }
 
     function repeatLast() {
-        if (lastTokens.length)
-            beginSpeak(lastTokens.slice())
+        if (!lastTokens.length)
+            return
+        speechHost = lastHost
+        beginSpeak(lastTokens.slice())
     }
 
     function pressNav(button) {
@@ -660,62 +936,6 @@ Item {
                 parent.held = 0
                 parent.progress = 0
             }
-        }
-    }
-
-    component ReadIcon: Item {
-        property string kind: "line"
-        signal clicked()
-        width: 52
-        height: 44
-        opacity: iconArea.containsPress ? 0.55 : 1
-
-        Item {
-            id: chevron
-            width: 14
-            height: 16
-            anchors.verticalCenter: parent.verticalCenter
-            x: 0
-            Rectangle {
-                width: 10
-                height: 3
-                radius: 1
-                color: root.accentColor
-                y: 4
-                transformOrigin: Item.Left
-                rotation: -42
-            }
-            Rectangle {
-                width: 10
-                height: 3
-                radius: 1
-                color: root.accentColor
-                y: 9
-                transformOrigin: Item.Left
-                rotation: 42
-            }
-        }
-
-        Column {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: chevron.right
-            anchors.leftMargin: 6
-            spacing: 4
-            Repeater {
-                model: kind === "paragraph" ? 3 : 1
-                Rectangle {
-                    width: 26
-                    height: 3
-                    radius: 1
-                    color: root.accentColor
-                }
-            }
-        }
-
-        MouseArea {
-            id: iconArea
-            anchors.fill: parent
-            onClicked: parent.clicked()
         }
     }
 

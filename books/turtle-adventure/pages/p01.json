@@ -22,15 +22,54 @@
               "words": [
                 {
                   "id": "w1",
-                  "text": "A"
+                  "text": "I"
                 },
                 {
                   "id": "w2",
-                  "text": "little"
+                  "text": "am"
                 },
                 {
                   "id": "w3",
-                  "text": "turtle."
+                  "text": "a"
+                },
+                {
+                  "id": "w4",
+                  "text": "little",
+                  "highlight": false
+                },
+                {
+                  "id": "w5",
+                  "text": "turtle.",
+                  "highlight": false
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w6",
+                  "text": "I",
+                  "highlight": false
+                },
+                {
+                  "id": "w7",
+                  "text": "have",
+                  "highlight": false
+                },
+                {
+                  "id": "w8",
+                  "text": "a",
+                  "highlight": false
+                },
+                {
+                  "id": "w9",
+                  "text": "brown",
+                  "highlight": false
+                },
+                {
+                  "id": "w10",
+                  "text": "shell.",
+                  "highlight": false
                 }
               ]
             }
@@ -38,11 +77,95 @@
         }
       ],
       "rect": {
-        "x": 0.64,
-        "y": 0.1,
-        "width": 0.32,
-        "height": 0.36
+        "x": 0.6861744063058082,
+        "y": 0.05792650841908326,
+        "width": 0.31382559369419183,
+        "height": 0.24270653063610853
       }
+    },
+    {
+      "type": "text",
+      "rect": {
+        "x": 0.6888956729951525,
+        "y": 0.3791345591674464,
+        "width": 0.3105276410621651,
+        "height": 0.3088790633769876
+      },
+      "content": [
+        {
+          "lines": [
+            {
+              "words": [
+                {
+                  "id": "w1",
+                  "text": "I",
+                  "highlight": false
+                },
+                {
+                  "id": "w2",
+                  "text": "like",
+                  "highlight": false
+                },
+                {
+                  "id": "w3",
+                  "text": "to",
+                  "highlight": false
+                },
+                {
+                  "id": "w4",
+                  "text": "sit",
+                  "highlight": false
+                },
+                {
+                  "id": "w5",
+                  "text": "in",
+                  "highlight": false
+                },
+                {
+                  "id": "w6",
+                  "text": "the",
+                  "highlight": false
+                },
+                {
+                  "id": "w7",
+                  "text": "sunshine",
+                  "highlight": false
+                },
+                {
+                  "id": "w8",
+                  "text": "and",
+                  "highlight": false
+                },
+                {
+                  "id": "w9",
+                  "text": "enjoy",
+                  "highlight": false
+                },
+                {
+                  "id": "w10",
+                  "text": "the",
+                  "highlight": false
+                },
+                {
+                  "id": "w11",
+                  "text": "fresh",
+                  "highlight": false
+                },
+                {
+                  "id": "w12",
+                  "text": "summer",
+                  "highlight": false
+                },
+                {
+                  "id": "w13",
+                  "text": "air.",
+                  "highlight": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "hotspots": [

@@ -18,8 +18,17 @@ TestCase {
         compare(card.title, "The Little Turtle's Adventure")
         compare(card.synopsis, "A little turtle finds a pond.")
         compare(card.cover, "assets/images/cover.jpg")
+        compare(card.voice, "af_heart")
+        var voiced = Shelf.entry("family-picnic", "{\"title\":\"Family Picnic\",\"voice\":\"af_bella\"}")
+        compare(voiced.voice, "af_bella")
         var titled = Shelf.entry("school-day", "{\"title\":\"School Day\"}")
         compare(titled.synopsis, "School Day")
         compare(titled.cover, "")
+        var renamed = Shelf.replaceId(text, "family-picnic", "pond-day")
+        var ids = Shelf.listIds(renamed)
+        compare(ids.length, 2)
+        compare(ids[0], "turtle-adventure")
+        compare(ids[1], "pond-day")
+        compare(Shelf.listIds(Shelf.replaceId(renamed, "pond-day", "pond-day")).length, 2)
     }
 }

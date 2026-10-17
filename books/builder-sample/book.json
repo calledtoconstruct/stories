@@ -1,5 +1,6 @@
 {
   "title": "Builder Sample",
   "age_band": "early",
+  "voice": "af_heart",
   "pages": ["p01.json"]
 }

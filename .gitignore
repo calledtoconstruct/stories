@@ -2,3 +2,10 @@
 *.o
 .qmlls.ini
 voice/usr/
+voice/.venv/
+voice/.tools/
+voice/.python/
+voice/models/
+voice/cache/
+voice/daemon.log
+voice/__pycache__/

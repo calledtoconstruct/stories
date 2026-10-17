@@ -1,0 +1,29 @@
+#!/bin/sh
+# Install the local Kokoro voice used by voice/speak.
+# Kokoro publishes wheels for Python 3.10–3.12, so this uses its own 3.12.
+set -e
+ROOT=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
+TOOLS="$ROOT/.tools"
+mkdir -p "$TOOLS"
+if [ ! -x "$TOOLS/uv" ]; then
+    curl -fsSL "https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-gnu.tar.gz" \
+        | tar -xz -C "$TOOLS" --strip-components=1
+fi
+export UV_PYTHON_INSTALL_DIR="$ROOT/.python"
+"$TOOLS/uv" python install 3.12
+rm -rf "$ROOT/.venv"
+"$TOOLS/uv" venv --python 3.12 "$ROOT/.venv"
+"$TOOLS/uv" pip install --python "$ROOT/.venv/bin/python" torch --index-url https://download.pytorch.org/whl/cpu
+"$TOOLS/uv" pip install --python "$ROOT/.venv/bin/python" 'kokoro>=0.9.4' soundfile
+"$TOOLS/uv" pip install --python "$ROOT/.venv/bin/python" \
+    "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
+export HF_HOME="$ROOT/models"
+export HF_HUB_DISABLE_TELEMETRY=1
+"$ROOT/.venv/bin/python" - << 'PY'
+from kokoro import KModel, KPipeline
+model = KModel(repo_id="hexgrad/Kokoro-82M").to("cpu").eval()
+pipeline = KPipeline(lang_code="a", model=model, repo_id="hexgrad/Kokoro-82M")
+for name in ("af_heart", "af_bella", "am_adam"):
+    pipeline.load_voice(name)
+print("voices ready")
+PY

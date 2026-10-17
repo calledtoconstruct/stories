@@ -22,15 +22,40 @@
               "words": [
                 {
                   "id": "w1",
-                  "text": "The"
+                  "text": "I"
                 },
                 {
                   "id": "w2",
-                  "text": "turtle"
+                  "text": "like"
                 },
                 {
                   "id": "w3",
-                  "text": "walks."
+                  "text": "to"
+                },
+                {
+                  "id": "w4",
+                  "text": "take",
+                  "highlight": false
+                },
+                {
+                  "id": "w5",
+                  "text": "walks",
+                  "highlight": false
+                },
+                {
+                  "id": "w6",
+                  "text": "to",
+                  "highlight": false
+                },
+                {
+                  "id": "w7",
+                  "text": "the",
+                  "highlight": false
+                },
+                {
+                  "id": "w8",
+                  "text": "pond.",
+                  "highlight": false
                 }
               ]
             }
@@ -38,10 +63,10 @@
         }
       ],
       "rect": {
-        "x": 0.06,
+        "x": 0.12065433922952634,
         "y": 0.04,
-        "width": 0.88,
-        "height": 0.22
+        "width": 0.7619630841270515,
+        "height": 0.11425719130028059
       }
     }
   ],

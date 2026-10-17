@@ -3,6 +3,7 @@
   "synopsis": "A family sits on a blanket, shares a picnic, and plays with a red ball.",
   "cover": "assets/images/cover.jpg",
   "age_band": "growing",
+  "voice": "af_bella",
   "format": "storybook/1",
   "pages": ["p01.json", "p02.json", "p03.json"]
 }

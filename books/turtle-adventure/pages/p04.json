@@ -22,19 +22,53 @@
               "words": [
                 {
                   "id": "w1",
-                  "text": "He"
+                  "text": "Even"
                 },
                 {
                   "id": "w2",
-                  "text": "meets"
+                  "text": "my"
                 },
                 {
                   "id": "w3",
-                  "text": "a"
+                  "text": "friend"
                 },
                 {
                   "id": "w4",
-                  "text": "rabbit."
+                  "text": "Rabbit"
+                },
+                {
+                  "id": "w5",
+                  "text": "is",
+                  "highlight": false
+                },
+                {
+                  "id": "w6",
+                  "text": "here!",
+                  "highlight": false
+                }
+              ]
+            },
+            {
+              "words": [
+                {
+                  "id": "w7",
+                  "text": "I",
+                  "highlight": false
+                },
+                {
+                  "id": "w8",
+                  "text": "found",
+                  "highlight": false
+                },
+                {
+                  "id": "w9",
+                  "text": "some",
+                  "highlight": false
+                },
+                {
+                  "id": "w10",
+                  "text": "lilly-pads!",
+                  "highlight": false
                 }
               ]
             }
@@ -42,10 +76,10 @@
         }
       ],
       "rect": {
-        "x": 0.56,
-        "y": 0.62,
-        "width": 0.4,
-        "height": 0.3
+        "x": 0.6,
+        "y": 0.2316661307296537,
+        "width": 0.2746312664767412,
+        "height": 0.36664742165575304
       }
     }
   ],
